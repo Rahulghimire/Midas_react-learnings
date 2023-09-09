@@ -1,19 +1,14 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import { login } from "../features/userSlice";
-import { useDispatch } from "react-redux";
 
-const Login = () => {
-  const dispatch = useDispatch();
+const Register = () => {
   const navigate = useNavigate();
 
   const onFinish = (values) => {
     console.log("Success:", values);
-    dispatch(login({ ...values, loggedIn: true }));
-    navigate("/");
+    navigate("/home");
   };
-  22;
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -87,4 +82,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

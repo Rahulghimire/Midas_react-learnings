@@ -30,3 +30,34 @@
   position: absolute !important;
   inset: -70px 500px 0px 0px !important;
 }
+
+.page-break {
+  page-break-before: always;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* BODY::-webkit-scrollbar,
+BODY::-webkit-scrollbar-track,
+BODY::-webkit-scrollbar-track {
+  all: unset;
+  appearance: none;
+} */
+
+::-webkit-scrollbar {
+  appearance: none;
+  width: 7px !important;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(233, 238, 250);
+}
+
+::-webkit-scrollbar-thumb {
+  appearance: none;
+  background-color: hsl(247, 49%, 39%);
+  border-radius: 15px;
+  height: 10px !important;
+}

@@ -32,7 +32,8 @@ const navAccountItems = [
   },
 ];
 
-const Accounts = () => {
+const Accounts = ({ text }) => {
+  console.log("welocme", text);
   return <div>Accounts</div>;
 };
 

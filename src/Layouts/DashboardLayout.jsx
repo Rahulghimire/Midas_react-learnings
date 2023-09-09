@@ -1,19 +1,13 @@
-import React, { useState } from "react";
-import Logo from "../assets/logo.png";
+import React, { useState, useEffect } from "react";
 import DashLogo from "../assets/dash-logo.png";
-import { Outlet } from "react-router-dom";
+import { Outlet, redirect, useLocation } from "react-router-dom";
 import {
   SearchOutlined,
   EllipsisOutlined,
   DownOutlined,
   NotificationOutlined,
-  AccountBookOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  DashboardOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -27,94 +21,114 @@ import {
   Modal,
 } from "antd";
 import { Link } from "react-router-dom";
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout;
 import Doctor from "../assets/doctor.png";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../features/userSlice";
+import { useNavigate } from "react-router-dom";
 
-const moduleNames = [
-  {
-    icon: <DashboardOutlined />,
-    name: "Account",
-  },
-  {
-    icon: <DashboardOutlined />,
-    name: "Analytics",
-  },
-  {
-    icon: <DashboardOutlined />,
-    name: "Appointment",
-  },
-  {
-    icon: <DashboardOutlined />,
-    name: "Claim Management",
-  },
-  {
-    icon: <DashboardOutlined />,
-    name: "CathLab",
-  },
-];
-
-const items = [
-  {
-    label: (
-      <a target="#" rel="noopener noreferrer" href="#">
-        superadmin
-      </a>
-    ),
-    key: "0",
-  },
-  {
-    label: (
-      <Button type="primary" className="bg-blue-800 w-full">
-        Logout
-      </Button>
-    ),
-    key: "1",
-  },
-];
+import {
+  moduleNames,
+  itemsNav,
+  navAccountItems,
+  navAnalyticsItems,
+  navPatientAdmimItems,
+  navAssetsItems,
+  navAppointmentItems,
+} from "../components/SidebarItems";
 
 const headerStyle = {
-  // textAlign: "center",
-  // color: "#fff",
-  // height: 64,
-  // paddingInline: 50,
-  // lineHeight: "64px",
-  // backgroundColor: "#7dbcea",
   backgroundColor: "white",
   height: "auto",
 };
 
 const contentStyle = {
-  // textAlign: "center",
-  // minHeight: 120,
-  // lineHeight: "120px",
-  // color: "#fff",
-  // backgroundColor: "#108ee9",
   padding: "3.4rem",
   backgroundColor: "white",
 };
 
 const siderStyle = {
-  // textAlign: "center",
-  // lineHeight: "120px",
-  // color: "#fff",
-  // backgroundColor: "#3ba0e9",
-  padding: "2rem",
+  padding: "0.5rem",
   backgroundColor: "white",
-};
-const footerStyle = {
-  // textAlign: "center",
-  // color: "#fff",
-  // backgroundColor: "#7dbcea",
 };
 
 const DashboardLayout = () => {
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      return;
+    }
+  }, []);
+
+  const items = [
+    {
+      label: (
+        <a target="#" rel="noopener noreferrer" href="#">
+          {user?.username}
+        </a>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <Button
+          type="primary"
+          className="bg-blue-800 w-full"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
+      ),
+      key: "1",
+    },
+  ];
+
+  const [menuItems, setMenuItems] = useState(itemsNav);
+  const location = useLocation();
+
+  const updateMenuItems = () => {
+    const currentPath = location.pathname;
+    let updatedItemsNav = [];
+    if (currentPath === "/") {
+      updatedItemsNav = itemsNav;
+    } else if (currentPath === "/accounts") {
+      updatedItemsNav = navAccountItems;
+      console.log(updatedItemsNav);
+    } else if (currentPath == "/analytics") {
+      updatedItemsNav = navAnalyticsItems;
+    } else if (currentPath == "/assets") {
+      updatedItemsNav = navAssetsItems;
+    } else if (currentPath == "/patient-adminstration") {
+      updatedItemsNav = navPatientAdmimItems;
+    } else if (currentPath == "/appointment") {
+      updatedItemsNav = navAppointmentItems;
+    }
+    setMenuItems(updatedItemsNav);
+  };
+
+  useEffect(() => {
+    updateMenuItems();
+  }, [location.pathname]);
+
+  const [searchValue, setSearchValue] = useState("");
+  const [filter, setFilter] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  // console.log(children);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -124,35 +138,8 @@ const DashboardLayout = () => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+    setFilter(false);
   };
-
-  const itemsNav = [
-    {
-      key: "0",
-      icon: <DashboardOutlined />,
-      label: (
-        <Link to="">
-          <span>Dashboard</span>
-        </Link>
-      ),
-    },
-
-    {
-      key: "1",
-      icon: <UserOutlined />,
-      label: "Nav 1",
-    },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Nav 2",
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: "Nav 3",
-    },
-  ];
 
   return (
     <Space
@@ -176,20 +163,35 @@ const DashboardLayout = () => {
                     placeholder="Search for modules, sub-modules, settings, etc"
                     prefix={<SearchOutlined />}
                     className="rounded-full"
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                      setFilter(true);
+                    }}
                   />
                 </div>
                 <div className="flex flex-wrap">
-                  {moduleNames &&
-                    moduleNames.map((item, index) => {
-                      return (
-                        <Link key={index} className="flex items-center p-5">
-                          {item.icon}
-                          <span className="ml-2">{item.name}</span>
-                        </Link>
-                      );
-                    })}
+                  {!filter && moduleNames
+                    ? moduleNames.map((item, index) => {
+                        return (
+                          <Link key={index} className="flex items-center p-5">
+                            {item.icon}
+                            <span className="ml-2">{item.name}</span>
+                          </Link>
+                        );
+                      })
+                    : moduleNames
+                        .filter((item) =>
+                          item.name
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                        )
+                        .map((filteredItem, index) => (
+                          <Link key={index} className="flex items-center p-5">
+                            {filteredItem.icon}
+                            <span className="ml-2">{filteredItem.name}</span>
+                          </Link>
+                        ))}
                 </div>
-                <div></div>
               </Modal>
             </div>
             <div>
@@ -228,14 +230,14 @@ const DashboardLayout = () => {
             </div>
           </div>
         </Header>
-        <Layout hasSider className="bg-white h-screen">
-          <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Layout className="bg-white h-screen">
+          <Sider collapsed={collapsed}>
             <div className="demo-logo-vertical" />
             <Menu
               theme="dark"
               mode="inline"
               defaultSelectedKeys={["1"]}
-              items={itemsNav}
+              items={menuItems}
             />
           </Sider>
           <Header
@@ -255,64 +257,11 @@ const DashboardLayout = () => {
               }}
             />
           </Header>
-
-          <Content style={contentStyle}>
-            {/* <div>
-              <div>
-                <div>
-                  <h2>You might be searching for</h2>
-                </div>
-                <div>No data</div>
-              </div>
-              <div>
-                <div className="mt-8">
-                  <h5>Recently Used</h5>
-                  <div className="mt-4 flex justify-between flex-wrap">
-                    <div className="flex items-center">
-                      <Link className="flex items-center" to="/accounts">
-                        <AccountBookOutlined style={{ fontSize: "30px" }} />
-                        <div className="ms-2">
-                          <p>Account</p>
-                          <span>2h Ago</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="flex items-center">
-                      <Link className="flex items-center" to="/analytics">
-                        <AccountBookOutlined style={{ fontSize: "30px" }} />
-                        <div className="ms-2">
-                          <p>Analytics</p>
-                          <span>2h Ago</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="flex items-center">
-                      <Link className="flex items-center" to="/appointment">
-                        <AccountBookOutlined style={{ fontSize: "30px" }} />
-                        <div className="ms-2">
-                          <p>Appointment</p>
-                          <span>2h Ago</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="flex items-center">
-                      <Link className="flex items-center" to="/assets">
-                        <AccountBookOutlined style={{ fontSize: "30px" }} />
-                        <div className="ms-2">
-                          <p>Assets</p>
-                          <span>2h Ago</span>
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {/* <Outlet /> */}
+          <Content style={{ padding: "0" }}>
             <Outlet />
           </Content>
         </Layout>
-        <Footer style={footerStyle}>Footer</Footer>
+        {/* <Footer>Footer</Footer> */}
       </Layout>
     </Space>
   );
