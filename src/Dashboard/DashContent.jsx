@@ -18,7 +18,7 @@ const DashContent = () => {
       <div>
         <div className="mt-8">
           <h5>Recently Used</h5>
-          <div className="mt-4 flex justify-between flex-wrap">
+          <div className="mt-4 flex justify-between flex-wrap gap-x-20 gap-y-8">
             <div className="flex items-center">
               <Link className="flex items-center" to="/accounts">
                 <AccountBookOutlined style={{ fontSize: "40px" }} />
@@ -60,6 +60,15 @@ const DashContent = () => {
                 <AccountBookOutlined style={{ fontSize: "40px" }} />
                 <div className="ms-2">
                   <p>Patient Administration</p>
+                  <span>2h Ago</span>
+                </div>
+              </Link>
+            </div>
+            <div className="flex items-center">
+              <Link className="flex items-center" to="/investigation">
+                <AccountBookOutlined style={{ fontSize: "40px" }} />
+                <div className="ms-2">
+                  <p>Investigation</p>
                   <span>2h Ago</span>
                 </div>
               </Link>

@@ -11,9 +11,11 @@ import {
   Appointment,
   Analytics,
   PatientAdministration,
+  Login,
+  Register,
+  Spinner,
+  Investigation,
 } from "./LazyRoute";
-import Login from "../Auth/Login";
-import Register from "../Auth/Register";
 
 import ReportPrint from "../ReportPrint";
 
@@ -34,7 +36,8 @@ export const Routes = createBrowserRouter(
           path="patient-adminstration"
           element={<PatientAdministration />}
         />
-        <Route path="*" element={<div>Page not found</div>} />
+        <Route path="investigation" element={<Investigation />} />
+        <Route path="*" element={<Spinner />} />
       </Route>
     </Route>
   )

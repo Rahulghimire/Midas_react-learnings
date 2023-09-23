@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import DashLogo from "../assets/dash-logo.png";
 import { Outlet, redirect, useLocation } from "react-router-dom";
 import {
@@ -19,6 +19,7 @@ import {
   theme,
   Menu,
   Modal,
+  notification,
 } from "antd";
 import { Link } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
@@ -53,9 +54,33 @@ const siderStyle = {
 };
 
 const DashboardLayout = () => {
+  const [notificationShown, setNotificationShown] = useState(true);
+
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // const Context = React.createContext({
+  //   name: "Default",
+  // });
+
+  // const contextValue = useMemo(
+  //   () => ({
+  //     name: user?.loginMessage,
+  //   }),
+  //   []
+  // );
+
+  // const [api, contextHolder] = notification.useNotification();
+
+  // const openNotification = () => {
+  //   api.info({
+  //     message: `Notification`,
+  //     description: (
+  //       <Context.Consumer>{({ name }) => `${name}!`}</Context.Consumer>
+  //     ),
+  //   });
+  // };
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -63,13 +88,20 @@ const DashboardLayout = () => {
     navigate("/login");
   };
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    } else {
-      return;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   } else if (notificationShown) {
+  //     notification.open({
+  //       message: "Notification",
+  //       description: <span className="green-text">{user?.loginMessage}</span>,
+  //       placement: "bottomRight",
+  //     });
+  //     setNotificationShown(false);
+  //   } else {
+  //     return;
+  //   }
+  // }, []);
 
   const items = [
     {

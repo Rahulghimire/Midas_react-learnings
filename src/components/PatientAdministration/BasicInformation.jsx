@@ -13,34 +13,40 @@ import {
 const { Option } = Select;
 
 const BasicInformation = () => {
-  const options = [];
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  const validateMessages = {
+    required: "${label} is required!",
   };
 
   return (
     <div className="p-2">
       <div
-        className="border-1 p-4 rounded"
-        style={{ boxShadow: "0px 4px 6px rgba(226, 229, 236, 1)" }}
+        className="p-4"
+        style={{ border: "3px solid rgb(211, 211, 211)", borderRadius: "10px" }}
       >
         <Form
           name="complex-form"
+          validateMessages={validateMessages}
           onFinish={onFinish}
-          // labelCol={{
-          //   span: 24,
-          // }}
-          // wrapperCol={{
-          //   span: 24,
-          // }}
+          initialValues={{
+            remember: true,
+          }}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
         >
-          <Form.Item>
-            <Radio checked>Hospital Information</Radio>
-          </Form.Item>
-          <Form.Item>
-            <Radio.Group name="radiogroup" defaultValue={1}>
-              <Radio value={1}>New</Radio>
-              <Radio value={2}>Folllow Up</Radio>
+          <Radio checked>Hospital Information</Radio>
+          <Form.Item name="radio-group" className="m-4">
+            <Radio.Group name="radiogroup" defaultValue="new">
+              <Radio value="new" checked>
+                New
+              </Radio>
+              <Radio value="follow-up">Folllow Up</Radio>
             </Radio.Group>
           </Form.Item>
           <Space
@@ -55,208 +61,53 @@ const BasicInformation = () => {
                 width: 200,
               }}
             >
-              <Select.Option value="Bipanna">Bipanna</Select.Option>
-              <Select.Option value="Old Patient">Old Patient</Select.Option>
-              <Select.Option value="test scheme">Test Scheme</Select.Option>
+              <Option value="Bipanna">Bipanna</Option>
+              <Option value="Old Patient">Old Patient</Option>
+              <Option value="test scheme">Test Scheme</Option>
             </Select>
           </Space>
           <Form.Item>
             <Radio checked>Personal Information</Radio>
           </Form.Item>
-          <div className="grid grid-cols-12 md:grid-cols-4">
-            <Input
-              addonBefore="First Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-
-            <Input
-              addonBefore="Middle Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Last Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-          <div className="grid grid-cols-4 mt-3">
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-
-          {/* next item */}
           <Form.Item>
-            <Radio checked>Permanent Address</Radio>
-          </Form.Item>
-          <div className="grid grid-cols-4">
-            <Input
-              addonBefore="First Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
+            <div className="grid grid-cols-12 md:grid-cols-4 m-0">
+              <Form.Item name="first-name">
+                <Input addonBefore="First Name:" style={{ width: "250px" }} />
+              </Form.Item>
+              <Form.Item name="middle-name">
+                <Input addonBefore="Middle Name:" style={{ width: "250px" }} />
+              </Form.Item>
 
-            <Input
-              addonBefore="Middle Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Last Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-          <div className="grid grid-cols-4 mt-3">
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-          {/* next item */}
+              <Form.Item name="last-name">
+                <Input addonBefore="Last Name:" style={{ width: "250px" }} />
+              </Form.Item>
+              <Form.Item>
+                <Input addonBefore="Name" style={{ width: "250px" }} />
+              </Form.Item>
+            </div>
+            <Form.Item>
+              <div className="grid grid-cols-4">
+                <Form.Item>
+                  <Input addonBefore="Name" style={{ width: "250px" }} />
+                </Form.Item>
+                <Form.Item>
+                  <Input addonBefore="Name" style={{ width: "250px" }} />
+                </Form.Item>
+
+                <Form.Item>
+                  <Input addonBefore="Name" style={{ width: "250px" }} />
+                </Form.Item>
+                <Form.Item>
+                  <Input addonBefore="Name" style={{ width: "250px" }} />
+                </Form.Item>
+              </div>
+            </Form.Item>
+          </Form.Item>
           <Form.Item>
-            <Radio checked>Temporary Address</Radio>
+            <Button type="primary" className="bg-[#262261]" htmlType="submit">
+              Submit
+            </Button>
           </Form.Item>
-          <div className="grid grid-cols-4">
-            <Input
-              addonBefore="First Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-
-            <Input
-              addonBefore="Middle Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Last Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-          <div className="grid grid-cols-4 mt-3">
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-
-          {/* next item */}
-          <Form.Item>
-            <Radio checked>Doctor Visit</Radio>
-          </Form.Item>
-          <div className="grid grid-cols-4">
-            <Input
-              addonBefore="First Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-
-            <Input
-              addonBefore="Middle Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Last Name:"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
-          <div className="grid grid-cols-4 mt-3">
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-            <Input
-              addonBefore="Name"
-              defaultValue=""
-              style={{ width: "250px" }}
-            />
-          </div>
         </Form>
       </div>
     </div>

@@ -192,3 +192,15 @@ export const navAppointmentItems = [
     label: "Appointment",
   },
 ];
+
+export const navInvestigationItems = [
+  {
+    key: "0",
+    icon: <DashboardOutlined />,
+    label: (
+      <Link to="">
+        <span>Dashboard</span>
+      </Link>
+    ),
+  },
+];
